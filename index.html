@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>Flowread — 英文チャンクリーダー</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">◉</span> Flowread</div><span class="top-note">英文を、前から読む練習。</span></header>
+    <div class="workspace">
+      <section class="input-panel" aria-labelledby="source-title">
+        <div class="section-head"><div><span class="eyebrow">01 · TEXT</span><h1 id="source-title">読む英文</h1></div><span id="file-name" class="file-name"></span></div>
+        <label class="upload" id="drop-zone"><input type="file" id="file-input" accept=".pdf,image/*,.txt,text/plain,application/pdf"><span class="upload-icon" aria-hidden="true">↑</span><strong>PDF・画像・テキストを選ぶ</strong><small>ここにドラッグ＆ドロップもできます</small></label>
+        <p class="helper">画像やスキャンPDFは読み取りに時間がかかります。読み取り後の英文は下で修正できます。</p>
+        <label for="source-text" class="field-label">抽出した英文 / 貼り付けた英文</label>
+        <textarea id="source-text" spellcheck="false" placeholder="ここに英文を貼り付けても始められます。"></textarea>
+        <div class="source-bottom"><span id="word-count">0 words</span><button type="button" class="text-button" id="sample-btn">例文を入れる</button></div>
+        <div class="status" id="status" role="status" aria-live="polite">英文を入力すると再生できます。</div>
+      </section>
+      <section class="reader-panel" aria-labelledby="reader-title">
+        <div class="section-head"><div><span class="eyebrow">02 · READ</span><h2 id="reader-title">リーディング</h2></div><span class="badge" id="mode-label">チャンク</span></div>
+        <div class="stage" id="stage"><span class="stage-hint" id="stage-hint">英文を読み込んで<br>再生してください</span><span class="current-chunk" id="current-chunk" aria-live="off"></span></div>
+        <div class="progress-row"><span id="position">0 / 0</span><span id="time-left">約 0:00</span></div>
+        <input id="seek" class="seek" type="range" min="0" max="1" value="0" aria-label="再生位置">
+        <div class="transport"><button id="back-btn" type="button" class="round-btn" aria-label="1チャンク戻る" title="1チャンク戻る">↶</button><button id="play-btn" type="button" class="play-btn" aria-label="再生" disabled>▶ <span>再生</span></button><button id="forward-btn" type="button" class="round-btn" aria-label="1チャンク進む" title="1チャンク進む">↷</button></div>
+        <div class="settings"><label class="setting"><span>表示単位</span><select id="chunk-mode"><option value="chunk">意味のまとまり</option><option value="word">1語ずつ</option></select></label><label class="setting"><span>速度 <output id="speed-output">180 WPM</output></span><input type="range" id="speed" min="80" max="500" step="10" value="180"></label></div>
+        <p class="shortcut">Space 再生・一時停止　← → チャンク移動</p>
+        <details class="check"><summary>読み終わったら、内容を確認</summary><p>本文を見ずに、何について書かれていたか一文で説明できますか？</p><textarea id="reflection" placeholder="自分の言葉で要約してみる" aria-label="読後の要約"></textarea><button id="show-source" type="button" class="text-button">元の英文を確認</button></details>
+      </section>
+    </div>
+    <footer>読み込みと再生はブラウザ内で処理します。初回は文字認識用データの取得に通信が必要です。</footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
