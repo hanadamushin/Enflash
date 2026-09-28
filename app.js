@@ -1,5 +1,6 @@
 const $ = id => document.getElementById(id);
 const el = Object.fromEntries(['file-input','file-name','drop-zone','source-text','word-count','sample-btn','status','stage-hint','current-chunk','position','time-left','seek','back-btn','play-btn','forward-btn','chunk-mode','mode-label','speed','speed-output','show-source'].map(id => [id,$(id)]));
+// Original text written for Enflash; freely reusable as an in-app sample.
 const sample = `When we learn a new language, we often try to understand every word before moving on. However, fluent readers usually process small groups of words as they appear. They connect each new idea to the one before it, even when a sentence is long. This does not mean that they never look back. It means they can choose when to slow down, and when to keep reading.`;
 let chunks=[], index=0, playing=false, timer=null, busy=false;
 const wordCount = s => (s.match(/\b[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*\b/gu)||[]).length;
@@ -42,7 +43,7 @@ el.speed.addEventListener('input',()=>{el['speed-output'].textContent=`${el.spee
 el['play-btn'].addEventListener('click',toggle);
 el['back-btn'].addEventListener('click',()=>move(-1));el['forward-btn'].addEventListener('click',()=>move(1));
 el.seek.addEventListener('input',()=>{index=Number(el.seek.value);render();schedule()});
-el['sample-btn'].addEventListener('click',()=>{el['source-text'].value=sample;el['file-name'].textContent='例文';rebuild()});
+el['sample-btn'].addEventListener('click',()=>{el['source-text'].value=sample;el['file-name'].textContent='オリジナル例文';rebuild()});
 el['show-source'].addEventListener('click',()=>{el['source-text'].scrollIntoView({behavior:'smooth',block:'center'});el['source-text'].focus()});
 document.addEventListener('keydown',e=>{if(['TEXTAREA','INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)||e.altKey||e.metaKey||e.ctrlKey)return;if(e.code==='Space'){e.preventDefault();toggle()}else if(e.code==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.code==='ArrowRight'){e.preventDefault();move(1)}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)stop()});
@@ -72,4 +73,6 @@ async function loadFile(file){
   busy=true;stop();el['file-name'].textContent=file.name;el['play-btn'].disabled=true;
   try{setStatus(`${file.name} を読み込んでいます…`);const text=pdf?await extractPdf(file):image?await ocr(file,'画像'):await file.text();if(!text.trim())throw new Error('文字を抽出できませんでした。別の画像を試すか、英文を貼り付けてください。');el['source-text'].value=text;rebuild();setStatus(`${file.name} を読み込みました。英文を確認・修正してから再生できます。`)}catch(e){setStatus(e.message||'読み取りに失敗しました。',true);render()}finally{busy=false;render()}
 }
-render();
+el['source-text'].value=sample;
+el['file-name'].textContent='オリジナル例文';
+rebuild();
